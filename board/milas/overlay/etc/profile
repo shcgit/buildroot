@@ -1,0 +1,74 @@
+#!/bin/ash
+
+PATH="/bin"
+
+ulimit -c 0
+
+USER="`id -un`"
+
+if [ `id -u` = 0 ]; then
+	PATH=$PATH:/sbin
+	HOME=/root
+else
+	HOME=/tmp/$USER
+	if [ ! -d $HOME ]; then
+		mkdir $HOME
+	fi
+fi
+
+PS1="# "
+LOGNAME=$USER
+
+if [ -f /bin/hostname ]; then
+	HOSTNAME=`/bin/hostname`
+else
+	HOSTNAME="localhost"
+fi
+
+INPUTRC="/etc/inputrc"
+TMPDIR="/var/tmp"
+HISTFILE="/dev/null"
+LANG=en_US
+LC_ALL=C
+TERM=vt102
+TERMINFO=/etc/terminfo
+TZ=UTC
+GBM_ALWAYS_SOFTWARE=1
+GST_REGISTRY_FORK=no
+GST_REGISTRY_UPDATE=no
+QT_QPA_EGLFS_DISABLE_INPUT=1
+QT_QPA_EGLFS_INTEGRATION=eglfs_kms
+QT_QPA_EGLFS_HIDECURSOR=1
+QT_QPA_FB_DISABLE_INPUT=1
+QT_QPA_FB_DRM=1
+QT_QPA_FB_HIDECURSOR=1
+
+export -n RUNLEVEL
+export PATH PS1 LOGNAME HOSTNAME INPUTRC TMPDIR HISTFILE
+export HOME LANG LC_ALL TERM TERMINFO TZ
+export GBM_ALWAYS_SOFTWARE GST_REGISTRY_FORK GST_REGISTRY_UPDATE
+export QT_QPA_EGLFS_DISABLE_INPUT QT_QPA_EGLFS_INTEGRATION
+export QT_QPA_EGLFS_HIDECURSOR QT_QPA_FB_DISABLE_INPUT
+export QT_QPA_FB_DRM QT_QPA_FB_HIDECURSOR
+
+#Debug stuff
+#export MESA_DEBUG=1
+#export EGL_LOG_LEVEL=debug
+#export LIBGL_DEBUG=verbose
+#export QT_LOGGING_RULES=qt.qpa.*=true
+
+#Unhide console cursor
+echo -e -n "\e[?25h"
+
+# Qt5 Show cursor
+#TOUCHDEV=
+#for i in /sys/class/input/event* ; do
+#	if grep -iq "Touchscreen$" $i/device/name; then
+#		TOUCHDEV=`basename $i`
+#	fi
+#done
+#if [ -n "TOUCHDEV" ]; then
+#	export QT_QPA_GENERIC_PLUGINS=evdevmouse
+#	export QT_QPA_EVDEV_MOUSE_PARAMETERS=/dev/input/$TOUCHDEV
+#	export QT_QPA_FB_HIDECURSOR=0
+#fi

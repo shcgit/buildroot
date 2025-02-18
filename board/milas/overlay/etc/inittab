@@ -1,0 +1,15 @@
+null::sysinit:/bin/mount -t proc proc /proc
+null::sysinit:/bin/mkdir -p /dev/shm
+null::sysinit:/bin/mount -a
+null::sysinit:/bin/ln -sf /proc/self/fd /dev/fd
+null::sysinit:/bin/ln -sf /proc/self/fd/0 /dev/stdin
+null::sysinit:/bin/ln -sf /proc/self/fd/1 /dev/stdout
+null::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
+::sysinit:/etc/init.d/rcS
+
+::askfirst:-/bin/ash
+
+::shutdown:/etc/init.d/rcK
+null::shutdown:/bin/umount -a -r
+
+::restart:/sbin/init -q

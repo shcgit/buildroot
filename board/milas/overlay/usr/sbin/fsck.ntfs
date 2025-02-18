@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Strip any parameters from ntfsfix e.g. "-a", "-T" etc.
+`echo /bin/ntfsfix -d $@ | sed "s/ [-].//g"`
+
+exit $?

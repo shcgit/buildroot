@@ -1,0 +1,390 @@
+state.DAICS4351 {
+	control.3 {
+		iface MIXER
+		name 'Soft Ramp Zero Cross Control'
+		value 'Immediate'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Immediate
+			item.1 'Zero Cross'
+			item.2 'Soft Ramp'
+			item.3 'SR on ZC'
+		}
+	}
+	control.4 {
+		iface MIXER
+		name 'Auto-Mute Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.5 {
+		iface MIXER
+		name 'Popguard Transient Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
+state.SAI1SGTL5000 {
+	control.11 {
+		iface MIXER
+		name 'Lineout Playback Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
+state.SSI0WM8753 {
+	control.1 {
+		iface MIXER
+		name 'Hi-Fi DAC Left/Right channel Swap'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.56 {
+		iface MIXER
+		name 'Left Mixer Left Playback Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.60 {
+		iface MIXER
+		name 'Right Mixer Right Playback Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
+state.MCASP0SGTL5000 {
+	control.11 {
+		iface MIXER
+		name 'Lineout Playback Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
+state.MCASP0AIC3100 {
+	control.2 {
+		iface MIXER
+		name 'ADC Capture Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.3 {
+		iface MIXER
+		name 'ADC Capture Volume'
+		value 40
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 64'
+			dbmin -2000
+			dbmax 1200
+			dbvalue.0 0
+		}
+	}
+	control.5 {
+		iface MIXER
+		name 'Speaker Driver Playback Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.7 {
+		iface MIXER
+		name 'Speaker Analog Playback Volume'
+		value 127
+		comment {
+			access 'read write'
+			type INTEGER
+			count 1
+			range '0 - 127'
+			dbmin -6350
+			dbmax 0
+			dbvalue.0 0
+		}
+	}
+	control.16 {
+		iface MIXER
+		name 'DAC Right Input'
+		value Off
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'Right Data'
+			item.2 'Left Data'
+			item.3 Mono
+		}
+	}
+	control.19 {
+		iface MIXER
+		name 'MIC1LP P-Terminal'
+		value 'FFR 10 Ohm'
+		comment {
+			access 'read write'
+			type ENUMERATED
+			count 1
+			item.0 Off
+			item.1 'FFR 10 Ohm'
+			item.2 'FFR 20 Ohm'
+			item.3 'FFR 40 Ohm'
+		}
+	}
+	control.23 {
+		iface MIXER
+		name 'Output Left From Left DAC'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.28 {
+		iface MIXER
+		name 'Speaker Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
+state.IMX6SPDIF {
+	control.8 {
+		iface PCM
+		name 'IEC958 USyncMode CDText'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
+state.SSI2AIC3104 {
+	control.1 {
+		iface MIXER
+		name 'PCM Playback Volume'
+		value.0 127
+		value.1 127
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 127'
+			dbmin -6350
+			dbmax 0
+			dbvalue.0 0
+			dbvalue.1 0
+		}
+	}
+	control.15 {
+		iface MIXER
+		name 'Line DAC Playback Volume'
+		value.0 118
+		value.1 118
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 118'
+			dbmin -9999999
+			dbmax 0
+			dbvalue.0 0
+			dbvalue.1 0
+		}
+	}
+	control.23 {
+		iface MIXER
+		name 'HP Playback Switch'
+		value.0 false
+		value.1 false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 2
+		}
+	}
+	control.25 {
+		iface MIXER
+		name 'HPCOM Playback Switch'
+		value.0 false
+		value.1 false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 2
+		}
+	}
+	control.47 {
+		iface MIXER
+		name 'Left PGA Mixer Line1L Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.49 {
+		iface MIXER
+		name 'Left PGA Mixer Mic2L Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.51 {
+		iface MIXER
+		name 'Right PGA Mixer Line1R Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.62 {
+		iface MIXER
+		name 'Right Line Mixer DACR1 Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.64 {
+		iface MIXER
+		name 'Left HP Mixer DACL1 Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.70 {
+		iface MIXER
+		name 'Right HP Mixer DACR1 Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.72 {
+		iface MIXER
+		name 'Left HPCOM Mixer DACL1 Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+	control.78 {
+		iface MIXER
+		name 'Right HPCOM Mixer DACR1 Switch'
+		value false
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
+state.ESAIPCM3168A {
+	control.31 {
+		iface MIXER
+		name 'ADC3 Mute Switch'
+		value.0 true
+		value.1 true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 2
+		}
+	}
+	control.36 {
+		iface MIXER
+		name 'ADC1 Capture Volume'
+		value.0 201
+		value.1 201
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 241'
+			dbmin -9999999
+			dbmax 2000
+			dbvalue.0 0
+			dbvalue.1 0
+		}
+	}
+	control.37 {
+		iface MIXER
+		name 'ADC2 Capture Volume'
+		value.0 201
+		value.1 201
+		comment {
+			access 'read write'
+			type INTEGER
+			count 2
+			range '0 - 241'
+			dbmin -9999999
+			dbmax 2000
+			dbvalue.0 0
+			dbvalue.1 0
+		}
+	}
+}
