@@ -14,6 +14,12 @@ PROCPS_NG_INSTALL_STAGING = YES
 PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
 PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
 
+# Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
+# Applying 0002-fix-ncurses-h-include.patch touches configure.ac
+# Applying 0003-build-sys-Fix-pidfd_open-checking.patch touches configure.ac
+# Applying 0004-build-sys-Fix-define-of-HAVE_PIDFD_OPEN.patch touches configure.ac
+PROCPS_NG_AUTORECONF = YES
+
 ifeq ($(BR2_PACKAGE_SYSTEMD),y)
 PROCPS_NG_DEPENDENCIES += systemd
 PROCPS_NG_CONF_OPTS += --with-systemd
@@ -52,7 +58,7 @@ else
 PROCPS_NG_CONF_OPTS += --enable-w
 endif
 
-ifeq ($(BR2_PACKAGE_PROCPS_NS_ORIGINAL_TOP),y)
+ifeq ($(BR2_PACKAGE_PROCPS_NG_ORIGINAL_TOP),y)
 PROCPS_NG_CONF_OPTS += --disable-modern-top
 endif
 

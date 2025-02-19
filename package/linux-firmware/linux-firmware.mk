@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-LINUX_FIRMWARE_VERSION = 20240709
+LINUX_FIRMWARE_VERSION = 20240909
 LINUX_FIRMWARE_SOURCE = linux-firmware-$(LINUX_FIRMWARE_VERSION).tar.xz
 LINUX_FIRMWARE_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/firmware
 LINUX_FIRMWARE_INSTALL_IMAGES = YES
@@ -79,8 +79,7 @@ endif
 ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RTL_87XX_BT),y)
 LINUX_FIRMWARE_FILES += \
 	rtl_bt/rtl8723a_fw.bin rtl_bt/rtl8723b_fw.bin \
-	rtl_bt/rtl8723bs_config-OBDA8723.bin \
-	rtl_bt/rtl8723bs_fw.bin rtl_bt/rtl8723d_config.bin \
+	rtl_bt/rtl8723bs_config.bin rtl_bt/rtl8723bs_fw.bin \
 	rtl_bt/rtl8723d_fw.bin rtl_bt/rtl8761a_fw.bin \
 	rtl_bt/rtl8761b_fw.bin rtl_bt/rtl8761b_config.bin \
 	rtl_bt/rtl8761bu_fw.bin rtl_bt/rtl8761bu_config.bin
@@ -483,6 +482,15 @@ LINUX_FIRMWARE_FILES += \
 	ti-connectivity/wl18xx-fw-4.bin \
 	ti-connectivity/wl127x-nvs.bin \
 	ti-connectivity/TIInit_7.2.31.bts
+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+endif
+
+# cc33xx
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_CC33XX),y)
+LINUX_FIRMWARE_FILES += \
+	ti-connectivity/cc33xx_2nd_loader.bin \
+	ti-connectivity/cc33xx_fw.bin \
+	ti-connectivity/cc33xx-conf.bin
 LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
 endif
 
@@ -908,6 +916,10 @@ endif
 ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF),y)
 LINUX_FIRMWARE_FILES += arm/mali/arch*/mali_csffw.bin
 LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.mali_csffw
+endif
+
+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RP2),y)
+LINUX_FIRMWARE_FILES += rp2.fw
 endif
 
 ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
