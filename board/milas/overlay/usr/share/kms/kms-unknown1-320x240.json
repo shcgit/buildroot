@@ -1,0 +1,11 @@
+{
+	"device": "/dev/dri/card0",
+	"hwcursor": false,
+	"pbuffers": true,
+	"outputs": [
+		{
+			"name": "UNKNOWN1",
+			"mode": "320x240"
+		}
+	]
+}

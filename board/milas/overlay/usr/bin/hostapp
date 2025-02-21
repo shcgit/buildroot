@@ -1,0 +1,78 @@
+#!/bin/bash
+
+gpiobase()
+{
+	if [ -d /sys/class/gpio ]; then
+		for gpiochip in /sys/class/gpio/gpiochip* ; do
+			local label=`cat $gpiochip/label`
+			local base=`cat $gpiochip/base`
+			if [ "$label" == "$1" ]; then
+				echo -n $(($base + $2))
+				return
+			fi
+		done
+	fi
+
+	echo -n 0
+}
+
+gpioexport()
+{
+	local cfg=0
+	local i=0
+	while [ "$i" -lt $2 ]; do
+		local gpio=$(($1 + $i))
+
+		echo -n "$gpio" > /sys/class/gpio/export 2>/dev/null
+		echo -n "in" > /sys/class/gpio/gpio$gpio/direction 2>/dev/null
+
+		local val=`cat /sys/class/gpio/gpio$gpio/value`
+		local pow=$((2**i))
+
+		cfg=$(($cfg + (val * (2**pow))))
+
+		i=$((i + 1))
+	done 
+
+	echo -n $cfg
+}
+
+gpiofind()
+{
+	local base=$(gpiobase $1 $2)
+	if [ $base -ne 0 ]; then
+		echo -n $(gpioexport $base $3)
+	fi
+}
+
+selectapp()
+{
+	case "$1" in
+	"9" | "10" )
+		echo -n "spider"
+	;;
+	* )
+		echo -n "informer"
+	;;
+	esac
+
+	exit 0
+}
+
+cfg=$(gpiofind 10200000.bgpio 4 4)
+if [ ! -z "$cfg" ]; then
+	selectapp $cfg
+fi
+
+cfg=$(gpiofind cc000000.bgpio 0 8)
+if [ ! -z "$cfg" ]; then
+	selectapp $cfg
+fi
+
+cfg=$(gpiofind 0-0020 0 5)
+	selectapp $cfg
+fi
+
+echo -n ""
+
+exit 0
