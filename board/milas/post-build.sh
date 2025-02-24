@@ -76,4 +76,19 @@ for i in "${list_rm[@]}"; do
 	done
 done
 
+BOARD_DIR="$(dirname $0)"
+MILAS_ROOT="$BOARD_DIR/../../../.."
+
+# Install Milas-specific files
+if [ -f $MILAS_ROOT/apps/informer/informer ]; then
+	cp -f $MILAS_ROOT/apps/informer/informer $TARGET_DIR/bin
+	$HOST_DIR/bin/arm-linux-strip $TARGET_DIR/bin/informer
+
+	mkdir -p $TARGET_DIR/usr/share/kms
+	cp -f $MILAS_ROOT/misc/kms/* $TARGET_DIR/usr/share/kms
+
+	mkdir -p $TARGET_DIR/usr/share/sounds
+	cp -f $MILAS_ROOT/misc/sounds/new/*.pcm $TARGET_DIR/usr/share/sounds
+fi
+
 exit 0
