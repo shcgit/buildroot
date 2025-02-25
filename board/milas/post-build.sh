@@ -76,13 +76,19 @@ for i in "${list_rm[@]}"; do
 	done
 done
 
+strip_all()
+{
+	$HOST_DIR/bin/arm-linux-strip \
+	"--strip-debug --strip-unneeded -R .comment -R .note -R .note.gnu.build-id" \
+	$TARGET_DIR/$1/* 2>/dev/null
+}
+
 BOARD_DIR="$(dirname $0)"
 MILAS_ROOT="$BOARD_DIR/../../../.."
 
 # Install Milas-specific files
 if [ -f $MILAS_ROOT/apps/informer/informer ]; then
 	cp -f $MILAS_ROOT/apps/informer/informer $TARGET_DIR/bin
-	$HOST_DIR/bin/arm-linux-strip $TARGET_DIR/bin/informer
 
 	mkdir -p $TARGET_DIR/usr/share/kms
 	cp -f $MILAS_ROOT/misc/kms/* $TARGET_DIR/usr/share/kms
@@ -90,5 +96,15 @@ if [ -f $MILAS_ROOT/apps/informer/informer ]; then
 	mkdir -p $TARGET_DIR/usr/share/sounds
 	cp -f $MILAS_ROOT/misc/sounds/new/*.pcm $TARGET_DIR/usr/share/sounds
 fi
+
+strip_all bin
+strip_all sbin
+strip_all lib
+strip_all lib/dri
+strip_all lib/gstreamer-1.0
+
+for d in `ls $TARGET_DIR/lib/qt/plugins`; do
+	strip_all lib/qt/plugins/$d/*
+done
 
 exit 0
