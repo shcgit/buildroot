@@ -1,0 +1,7 @@
+menu "Milas BSP packages"
+
+config BR2_MILAS_GIT
+	string "Milas GIT site"
+	default "https://github.com/shcgit"
+
+endmenu
