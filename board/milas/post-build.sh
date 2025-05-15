@@ -1,11 +1,27 @@
 #!/bin/bash
 
 list_rm=(
+	bin/asc2log
+	bin/bcmserver
+	bin/can-calc-bit-timing
+	bin/canbusload
+	bin/canfdtest
+	bin/cangen
+	bin/cangw
+	bin/canlogserver
+	bin/canplayer
+	bin/cansequence
+	bin/cansniffer
 	bin/chattr
 	bin/compile_et
 	bin/drmdevice
+	bin/isotp*
+	bin/j1939*
 	bin/lowntfs-3g
+	bin/log2asc
+	bin/log2long
 	bin/lsattr
+	bin/mcp251xfd-dump
 	bin/mk_cmds
 	bin/modeprint
 	bin/ntfs-3g.probe
@@ -17,6 +33,10 @@ list_rm=(
 	bin/pcre2grep
 	bin/pcre2test
 	bin/proptest
+	bin/slcanpty
+	bin/slcan_attach
+	bin/slcand
+	bin/testj1939
 	bin/vbltest
 	sbin/badblocks
 	sbin/dump.exfat
