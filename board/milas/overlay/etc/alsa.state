@@ -35,6 +35,19 @@ state.DAICS4351 {
 	}
 }
 
+state.I2S0SGTL5000 {
+	control.11 {
+		iface MIXER
+		name 'Lineout Playback Switch'
+		value true
+		comment {
+			access 'read write'
+			type BOOLEAN
+			count 1
+		}
+	}
+}
+
 state.SAI1SGTL5000 {
 	control.11 {
 		iface MIXER

@@ -15,6 +15,9 @@ list_rm=(
 	bin/chattr
 	bin/compile_et
 	bin/drmdevice
+	bin/gpiodetect
+	bin/gpiofind
+	bin/gpiomon
 	bin/isotp*
 	bin/j1939*
 	bin/lowntfs-3g
