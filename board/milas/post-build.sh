@@ -1,6 +1,18 @@
 #!/bin/bash
 
-list_rm=(
+set -euo pipefail
+
+if [[ -z "${TARGET_DIR:-}" ]]; then
+	echo "ERROR: TARGET_DIR environment variable not set" >&2
+	exit 1
+fi
+
+if [[ -z "${HOST_DIR:-}" ]]; then
+	echo "ERROR: HOST_DIR environment variable not set" >&2
+	exit 1
+fi
+
+declare -a remove_items=(
 	bin/asc2log
 	bin/bcmserver
 	bin/can-calc-bit-timing
@@ -87,47 +99,60 @@ list_rm=(
 )
 
 # Remove unused entries
-for i in "${list_rm[@]}"; do
-	# Expand wildcards
-	for f in $TARGET_DIR/$i; do
-		# Files
-		[ -f $f ] && rm -f $f
-		# Symlinks
-		[ -L $f ] && rm -f $f
-		# Directories
-		[ -d $f ] && rm -fR $f
-	done
+for pattern in "${remove_items[@]}"; do
+	while IFS= read -r -d $'\0' item; do
+		if [[ -e "$item" ]]; then
+			echo "Removing: ${item#$TARGET_DIR/}"
+			rm -rf "$item"
+		fi
+	done < <(find "$TARGET_DIR" -path "$TARGET_DIR/$pattern" -print0)
 done
 
-strip_all()
-{
-	$HOST_DIR/bin/arm-linux-strip \
-	"--strip-debug --strip-unneeded -R .comment -R .note -R .note.gnu.build-id" \
-	$TARGET_DIR/$1/* 2>/dev/null
+strip_files() {
+	local dir="$1"
+
+	if [[ ! -d "$dir" ]]; then
+		return
+	fi
+
+	find "$dir" -type f \( -executable -o -name "*.so*" \) ! -name "*.ko" -print0 | \
+	xargs -0 -r "$HOST_DIR/bin/arm-linux-strip" \
+		--strip-debug \
+		--strip-unneeded \
+		-R .comment \
+		-R .note \
+		-R .note.gnu.build-id
 }
 
-BOARD_DIR="$(dirname $0)"
-MILAS_ROOT="$BOARD_DIR/../../../.."
+script_path="$0"
+resolved_script_path=$(realpath "$script_path")
+BOARD_DIR=$(dirname "$resolved_script_path")
+MILAS_ROOT=$(realpath "$BOARD_DIR/../../../..")
 
 # Install Milas-specific files
-if [ -f $MILAS_ROOT/apps/informer/informer ]; then
-	cp -f $MILAS_ROOT/apps/informer/informer $TARGET_DIR/bin
+if [[ -f "$MILAS_ROOT/apps/informer/informer" ]]; then
+	echo "Installing Milas components..."
+	install -D -m 0755 "$MILAS_ROOT/apps/informer/informer" "$TARGET_DIR/bin/informer"
 
-	mkdir -p $TARGET_DIR/usr/share/kms
-	cp -f $MILAS_ROOT/misc/kms/* $TARGET_DIR/usr/share/kms
+	# Install KMS files
+	mkdir -p "$TARGET_DIR/usr/share/kms"
+	cp -f "$MILAS_ROOT"/misc/kms/* "$TARGET_DIR/usr/share/kms"
 
-	mkdir -p $TARGET_DIR/usr/share/sounds
-	cp -f $MILAS_ROOT/misc/sounds/new/*.pcm $TARGET_DIR/usr/share/sounds
+	# Install sound files
+	mkdir -p "$TARGET_DIR/usr/share/sounds"
+	cp -f "$MILAS_ROOT"/misc/sounds/new/*.pcm "$TARGET_DIR/usr/share/sounds"
 fi
 
-strip_all bin
-strip_all sbin
-strip_all lib
-strip_all lib/dri
-strip_all lib/gstreamer-1.0
+strip_files "$TARGET_DIR/bin"
+strip_files "$TARGET_DIR/sbin"
+strip_files "$TARGET_DIR/lib"
+strip_files "$TARGET_DIR/lib/dri"
+strip_files "$TARGET_DIR/lib/gstreamer-1.0"
 
-for d in `ls $TARGET_DIR/lib/qt/plugins`; do
-	strip_all lib/qt/plugins/$d/*
-done
+if [[ -d "$TARGET_DIR/lib/qt/plugins" ]]; then
+	while IFS= read -r -d $'\0' plugin_dir; do
+		strip_files "$plugin_dir"
+	done < <(find "$TARGET_DIR/lib/qt/plugins" -mindepth 1 -maxdepth 1 -type d -print0)
+fi
 
 exit 0
