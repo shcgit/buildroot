@@ -43,7 +43,7 @@ stop)
 
 	if [ -d /sys/class/net/lo ]; then
 		/sbin/route del -net 127.0.0.0/8 dev lo 2>/dev/null
-		/sbin/ifconfig lo down
+		/sbin/ifconfig lo down 2>/dev/null
 	fi
 
 	;;

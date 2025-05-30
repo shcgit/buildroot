@@ -28,8 +28,8 @@ declare -a remove_items=(
 	bin/compile_et
 	bin/drmdevice
 	bin/gpiodetect
-	bin/gpiofind
 	bin/gpiomon
+	bin/gpionotify
 	bin/isotp*
 	bin/j1939*
 	bin/lowntfs-3g
@@ -100,12 +100,17 @@ declare -a remove_items=(
 
 # Remove unused entries
 for pattern in "${remove_items[@]}"; do
-	while IFS= read -r -d $'\0' item; do
-		if [[ -e "$item" ]]; then
-			echo "Removing: ${item#$TARGET_DIR/}"
-			rm -rf "$item"
+	for item in $TARGET_DIR/$pattern; do
+		if [[ -f "$item" ]]; then
+			rm -f "$item"
 		fi
-	done < <(find "$TARGET_DIR" -path "$TARGET_DIR/$pattern" -print0)
+		if [[ -L "$item" ]]; then
+			rm -f "$item"
+		fi
+		if [[ -d "$item" ]]; then
+			rm -fR "$item"
+		fi
+	done
 done
 
 strip_files() {
