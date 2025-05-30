@@ -15,7 +15,7 @@ start)
 	;;
 stop)
 	udevadm control --stop-exec-queue
-	killall udevd
+	killall udevd 2>/dev/null
 
 	;;
 esac

@@ -4,44 +4,47 @@ gpiobase()
 {
 	if [ -d /sys/class/gpio ]; then
 		for gpiochip in /sys/class/gpio/gpiochip* ; do
-			local label=`cat $gpiochip/label`
-			local base=`cat $gpiochip/base`
-			if [ "$label" == "$1" ]; then
-				echo -n $(($base + $2))
+			label=$(cat "$gpiochip/label")
+			base=$(cat "$gpiochip/base")
+			if [ "$label" = "$1" ]; then
+				printf "%d" $((base + $2))
 				return
 			fi
 		done
 	fi
 
-	echo -n 0
+	printf "0"
 }
 
 gpioexport()
 {
 	local cfg=0
 	local i=0
-	while [ "$i" -lt $2 ]; do
-		local gpio=$(($1 + $i))
+	while [ "$i" -lt "$2" ]; do
+		local gpio=$(( $1 + i ))
 
-		echo -n "$gpio" > /sys/class/gpio/export 2>/dev/null
-		echo -n "in" > /sys/class/gpio/gpio$gpio/direction 2>/dev/null
+		if [ ! -d "/sys/class/gpio/gpio$gpio" ]; then
+			echo "$gpio" > /sys/class/gpio/export 2>/dev/null
+		fi
 
-		local val=`cat /sys/class/gpio/gpio$gpio/value`
-		local pow=$((2**i))
-
-		cfg=$(($cfg + (val * (2**pow))))
+		if [ -d "/sys/class/gpio/gpio$gpio" ]; then
+			echo "in" > "/sys/class/gpio/gpio$gpio/direction" 2>/dev/null
+			val=$(cat "/sys/class/gpio/gpio$gpio/value")
+			cfg=$(( cfg | (val << i) ))
+		fi
 
 		i=$((i + 1))
-	done 
+	done
 
-	echo -n $cfg
+	printf "%d" "$cfg"
 }
 
 gpiofind()
 {
-	local base=$(gpiobase $1 $2)
-	if [ $base -ne 0 ]; then
-		echo -n $(gpioexport $base $3)
+	local base
+	base=$(gpiobase "$1" "$2")
+	if [ "$base" -ne 0 ]; then
+		gpioexport "$base" "$3"
 	fi
 }
 
@@ -49,30 +52,31 @@ selectapp()
 {
 	case "$1" in
 	"9" | "10" )
-		echo -n "spider"
+		printf "spider"
 	;;
 	* )
-		echo -n "informer"
+		printf "informer"
 	;;
 	esac
 
 	exit 0
 }
 
-cfg=$(gpiofind 10200000.bgpio 4 4)
-if [ ! -z "$cfg" ]; then
-	selectapp $cfg
+cfg=$(gpiofind "10200000.bgpio" 4 4)
+if [ -n "$cfg" ] && [ "$cfg" -ne 0 ]; then
+	selectapp "$cfg"
 fi
 
-cfg=$(gpiofind cc000000.bgpio 0 8)
-if [ ! -z "$cfg" ]; then
-	selectapp $cfg
+cfg=$(gpiofind "cc000000.bgpio" 0 8)
+if [ -n "$cfg" ] && [ "$cfg" -ne 0 ]; then
+	selectapp "$cfg"
 fi
 
-cfg=$(gpiofind 0-0020 0 5)
-	selectapp $cfg
+cfg=$(gpiofind "0-0020" 0 5)
+if [ -n "$cfg" ] && [ "$cfg" -ne 0 ]; then
+	selectapp "$cfg"
 fi
 
-echo -n ""
+printf ""
 
 exit 0

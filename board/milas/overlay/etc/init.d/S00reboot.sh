@@ -3,7 +3,11 @@
 case "$1" in
 stop)
 	sync
-	echo -n 0 > /dev/watchdog 2>/dev/null
+
+	if [ -c /dev/watchdog ]; then
+		printf 'V' > /dev/watchdog 2>/dev/null
+		printf '\0' > /dev/watchdog 2>/dev/null
+	fi
 
 	;;
 esac

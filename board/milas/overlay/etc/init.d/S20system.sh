@@ -4,8 +4,7 @@ case "$1" in
 start)
 	echo "Setup system..."
 
-	TZ=UTC
-	export TZ
+	export TZ=UTC
 
 	[ -e /dev/rtc1 ] && /sbin/hwclock -f /dev/rtc1 -s 2>/dev/null
 
@@ -16,16 +15,14 @@ start)
 		mkdir /tmp/$i
 	done
 
-	touch /var/run/utmp
-	touch /var/log/wtmp
+	touch /var/run/utmp /var/log/wtmp /var/udhcpd.leases
 
-	UNAME=`/bin/uname -sr`
-	echo -n "Linux $UNAME" > /var/issue
+	uname_info=$(uname -sr)
+	printf "Linux %s\n" "$uname_info" > /var/issue
 
-	echo "domain localdomain" > /var/resolv.conf
-	echo "search localdomain" >> /var/resolv.conf
-
-	touch /var/udhcpd.leases
+	printf "domain localdomain\n" >> /etc/resolv.conf
+	printf "search localdomain\n" >> /etc/resolv.conf
+	printf "nameserver 127.0.0.1\n" >> /etc/resolv.conf
 
 	;;
 esac

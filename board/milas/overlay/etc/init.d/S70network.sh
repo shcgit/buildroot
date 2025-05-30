@@ -36,13 +36,13 @@ stop)
 			interface=$intfn:dhcpc /etc/network/default.script deconfig
 		fi
 
-		/sbin/avahi-autoipd -k $intfn
+		/sbin/avahi-autoipd -k $intfn 2>/dev/null
 
 		/sbin/ifconfig $intfn down
 	done
 
 	if [ -d /sys/class/net/lo ]; then
-		/sbin/route del -net 127.0.0.0/8 dev lo
+		/sbin/route del -net 127.0.0.0/8 dev lo 2>/dev/null
 		/sbin/ifconfig lo down
 	fi
 
