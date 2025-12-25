@@ -30,6 +30,7 @@ declare -a remove_items=(
 	bin/gpiodetect
 	bin/gpiomon
 	bin/gpionotify
+	bin/isobusfs-*
 	bin/isotp*
 	bin/j1939*
 	bin/lowntfs-3g
@@ -76,7 +77,6 @@ declare -a remove_items=(
 	sbin/tune.exfat
 	sbin/tune2fs
 	lib/avahi
-	lib/dri/swrast_dri.so
 	lib/metatypes
 	lib/ntfs-3g
 	lib/libQt5Test.*
