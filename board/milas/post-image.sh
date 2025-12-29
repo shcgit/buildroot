@@ -2,12 +2,17 @@
 
 set -euo pipefail
 
+if [ $# -lt 1 ]; then
+	exit 1
+fi
+
 if [[ -z "${BINARIES_DIR:-}" ]]; then
 	echo "ERROR: BINARIES_DIR environment variable not set" >&2
 	exit 1
 fi
 
 script_path="$0"
+genimage_cfg="$2"
 resolved_script_path=$(realpath "$script_path")
 BOARD_DIR=$(dirname "$resolved_script_path")
 
@@ -35,7 +40,7 @@ else
 fi
 
 echo "Starting image generation process..."
-config_file="${BOARD_DIR}/genimage.cfg"
+config_file="${BOARD_DIR}/$genimage_cfg"
 
 if [[ ! -f "$config_file" ]]; then
 	echo "ERROR: genimage configuration not found: ${config_file}" >&2
