@@ -93,7 +93,7 @@ declare -a remove_items=(
 	share/ss
 	share/udhcpc
 	etc/init.d/S05avahi-setup.sh
-	etc/init.d/S10udev
+	etc/init.d/S10udevd
 	etc/os-release
 	dev/shm/lib
 )
